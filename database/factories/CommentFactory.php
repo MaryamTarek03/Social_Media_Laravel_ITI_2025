@@ -18,7 +18,7 @@ class CommentFactory extends Factory
     {
         return [
             "user_id" => \App\Models\User::factory(),
-            "post_id" => null, // This will be set by the relationship
+            "post_id" => null, 
             "content" => $this->faker->sentence(),
         ];
     }
