@@ -33,4 +33,15 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'reactions');
     }
+
+    public function scopeTimeline($query, $userId)
+    {
+        return $query->whereIn('user_id', function ($subQuery) use ($userId) {
+            $subQuery->select('following_id')
+                ->from('follows')
+                ->where('follower_id', $userId);
+        })->orWhere('user_id', $userId)
+            ->with(['user', 'reactions', 'comments'])
+            ->orderBy('created_at', 'desc');
+    }
 }
