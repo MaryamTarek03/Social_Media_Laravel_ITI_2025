@@ -63,3 +63,74 @@
         </div>
     </div>
 </x-app-layout>
+
+
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <!-- محتوى المقال -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1>{{ $post->title }}</h1>
+            <p class="text-muted">بواسطة {{ $post->user->name }} - {{ $post->created_at->format('Y-m-d') }}</p>
+            <div>{!! nl2br(e($post->content)) !!}</div>
+        </div>
+    </div>
+
+    <!-- جزء التعليقات -->
+    <div class="card">
+        <div class="card-header">
+            <h3>التعليقات ({{ $post->comments->count() }})</h3>
+        </div>
+        <div class="card-body">
+            
+            <!-- Form to add new comment -->
+            @auth
+            <form action="{{ route('comments.store', $post) }}" method="POST" class="mb-4">
+                @csrf
+                <div class="form-group mb-3">
+                    <textarea name="content" class="form-control @error('content') is-invalid @enderror" 
+                            rows="3" placeholder="اكتب تعليقك هنا..." required></textarea>
+                    @error('content')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <button type="submit" class="btn btn-primary">إضافة تعليق</button>
+            </form>
+            @else
+            <div class="alert alert-info">
+                <a href="{{ route('login') }}">سجل دخولك</a> لإضافة تعليق
+            </div>
+            @endauth
+
+            <hr>
+
+            <!-- Show Comments -->
+            @forelse($post->comments as $comment)
+            <div class="border-bottom pb-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <strong>{{ $comment->user->name }}</strong>
+                        <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                    </div>
+                    
+                    @if(auth()->check() && auth()->id() === $comment->user_id)
+                    <form action="{{ route('comments.destroy', $comment) }}" method="POST" 
+                        onsubmit="return confirm('Do you want to delete this comment?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">حذف</button>
+                    </form>
+                    @endif
+                </div>
+                <p class="mt-2 mb-0">{{ $comment->content }}</p>
+            </div>
+            @empty
+            <p class="text-muted text-center">لا توجد تعليقات بعد. كن أول من يعلق!</p>
+            @endforelse
+
+        </div>
+    </div>
+</div>
+@endsection
