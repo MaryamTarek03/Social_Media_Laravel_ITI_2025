@@ -12,20 +12,20 @@
 
                     {{-- رسالة نجاح --}}
                     @if (session('success'))
-                        <div class="mb-4 p-2 bg-green-100 text-green-800 rounded">
-                            {{ session('success') }}
-                        </div>
+                    <div class="mb-4 p-2 bg-green-100 text-green-800 rounded">
+                        {{ session('success') }}
+                    </div>
                     @endif
 
                     {{-- صورة البروفايل --}}
                     @if ($user->avatar_url)
-                        <img src="{{ asset('storage/' . $user->avatar_url) }}" 
-                             alt="Avatar" 
-                             class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <img src="{{ Storage::url($user->avatar_url) }}"
+                        alt="Avatar"
+                        class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
                     @else
-                        <img src="https://via.placeholder.com/120" 
-                             alt="Default Avatar" 
-                             class="w-32 h-32 rounded-full mx-auto mb-4">
+                    <img src="https://via.placeholder.com/120"
+                        alt="Default Avatar"
+                        class="w-32 h-32 rounded-full mx-auto mb-4">
                     @endif
 
                     {{-- الاسم --}}
@@ -40,23 +40,24 @@
                     </p>
 
                     {{-- أزرار التحكم --}}
+                    @if (Auth::id() === $user->id)
                     <div class="mt-6 flex justify-center gap-4">
-                        <a href="{{ route('profile.edit') }}" 
-                           class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                        <a href="{{ route('profile.edit') }}"
+                            class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
                             Edit Profile
                         </a>
 
                         <form method="POST" action="{{ route('profile.destroy') }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" 
-                                    onclick="return confirm('Are you sure you want to delete your account?')"
-                                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            <button type="submit"
+                                onclick="return confirm('Are you sure you want to delete your account?')"
+                                class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
                                 Delete Account
                             </button>
                         </form>
                     </div>
-
+                    @endif
                 </div>
             </div>
         </div>
