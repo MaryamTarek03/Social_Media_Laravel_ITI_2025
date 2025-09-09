@@ -28,4 +28,9 @@ class Post extends Model
     {
         return $this->hasMany(Reaction::class);
     }
+
+    public function reactedUsers()
+    {
+        return $this->belongsToMany(User::class, 'reactions');
+    }
 }
