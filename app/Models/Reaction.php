@@ -14,6 +14,10 @@ class Reaction extends Model
         'reaction_type_id',
     ];
 
+    protected $attributes = [ // set default values
+        'reaction_type_id' => 1,
+    ];
+
     public function post()
     {
         return $this->belongsTo(Post::class);
