@@ -16,11 +16,11 @@
             </div>
 
             <!-- Navigation Links -->
-            <div class="hidden md:flex md:items-center md:space-x-8">
-                <a href="{{ route('dashboard') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('dashboard') ? 'text-indigo-600 bg-indigo-50' : '' }}">
+            <div class="hidden md:flex md:items-center md:space-x-4">
+                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'font-bold border-b-2 border-black' : '' }}">
                     Home
                 </a>
-                <a href="{{ route('users.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('users.index') ? 'text-indigo-600 bg-indigo-50' : '' }}">
+                <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.index') ? 'font-bold border-b-2 border-black' : '' }}">
                     Discover People
                 </a>
 
@@ -28,15 +28,7 @@
                 <!-- Profile Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        @if(auth()->user()->avatar_url)
-                        <img class="h-8 w-8 rounded-full object-cover" src="{{ asset('storage/' . auth()->user()->avatar_url) }}" alt="{{ auth()->user()->name }}">
-                        @else
-                        <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                            <svg class="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        @endif
+                        <x-profile-avatar :user="auth()->user()" class="h-8 w-8 rounded-full object-cover" />
                         <!-- <span class="ml-2 text-gray-700">{{ auth()->user()->name }}</span> -->
                         <svg class="ml-1 h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -62,11 +54,15 @@
                     </div>
                 </div>
                 @else
-                <a href="{{ route('login') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                    Log in
+                <a href="{{ route('login') }}">
+                    <x-secondary-button>
+                        Log in
+                    </x-secondary-button>
                 </a>
-                <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                    Sign up
+                <a href="{{ route('register') }}">
+                    <x-primary-button>
+                        Sign up
+                    </x-primary-button>
                 </a>
                 @endauth
             </div>

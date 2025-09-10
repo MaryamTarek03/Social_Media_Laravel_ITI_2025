@@ -68,6 +68,21 @@
                 </div>
                 @endif
             </div>
+            <!-- Some followed users -->
+            <div class="lg:col-span-1">
+                <div class="bg-white shadow rounded-lg p-4 text-center">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Followed Users</h2>
+
+                    @auth
+                    @foreach(Auth::user()->followedUsers->take(5) as $followedUser)
+                    <x-user-list-item :user="$followedUser" />
+                    @endforeach
+                    @else
+                    <p class="mt-1 text-sm text-gray-500">Please Login or Sign Up</p>
+                    @endauth
+                </div>
+            </div>
         </div>
+
     </div>
 </x-app-layout>

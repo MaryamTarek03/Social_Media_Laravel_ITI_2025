@@ -37,6 +37,7 @@
         </div>
     </div>
 
+
     <!-- Post Content -->
     <div class="px-6 pb-4">
         <p class="text-gray-900 text-sm leading-relaxed">{{ $post->content }}</p>
@@ -48,30 +49,14 @@
         @endif
     </div>
 
+
     <!-- Post Actions -->
     <div class="px-6 py-3 bg-gray-50 border-t border-gray-200">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
                 <!-- Reactions -->
                 <div class="flex items-center space-x-2">
-                    @auth
-                    <form method="POST" action="{{ route('reactions.store', $post) }}" class="inline">
-                        @csrf
-                        <button type="submit" class="flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
-                            <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                            <span class="text-xs">{{ $post->reactions->count() }}</span>
-                        </button>
-                    </form>
-                    @else
-                    <span class="flex items-center text-gray-500">
-                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                        <span class="text-xs">{{ $post->reactions->count() }}</span>
-                    </span>
-                    @endauth
+                    <x-reaction-button :post="$post" />
                 </div>
 
                 <!-- Comments -->
@@ -82,10 +67,11 @@
                     <span class="text-xs">{{ $post->comments->count() }}</span>
                 </a>
             </div>
-
-            <a href="{{ route('posts.show', $post) }}" class="text-xs text-gray-500 hover:text-gray-700">
-                View Details
-            </a>
+            <div>
+                <a href="{{ route('posts.show', $post) }}" class="text-sm text-gray-500 hover:text-gray-700">
+                    View Post
+                </a>
+            </div>
         </div>
     </div>
 </div>

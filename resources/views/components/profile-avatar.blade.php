@@ -2,7 +2,7 @@
 @props(['user', 'class' => 'w-10 h-10'])
 <a href="{{ route('users.show', $user) }}">
     @if($user->avatar_url)
-    <img class="{{ $class }} rounded-full object-cover" src="{{ asset('storage/' . $user->avatar_url) }}" alt="{{ $user->name }}">
+    <img class="{{ $class }} rounded-full object-cover" src="{{ asset('storage/' . $user->avatar_url) }}">
     @else
     <div class="{{ $class }} rounded-full bg-gray-300 flex items-center justify-center">
         <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">

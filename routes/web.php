@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
 
     // Reactions
     Route::post('/posts/{post}/react', [ReactionController::class, 'store'])->name('reactions.store');
-    Route::delete('/posts/{post}/react', [ReactionController::class, 'destroy'])->name('reactions.destroy');
+    // Route::delete('/posts/{post}/react', [ReactionController::class, 'destroy'])->name('reactions.destroy');
 
     // Comments
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');

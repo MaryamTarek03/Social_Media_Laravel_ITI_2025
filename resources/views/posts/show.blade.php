@@ -75,39 +75,24 @@
                     <div class="flex items-center space-x-6">
                         <!-- Reactions -->
                         <div class="flex items-center space-x-2">
-                            @auth
-                            <form method="POST" action="{{ route('reactions.store', $post) }}" class="inline">
-                                @csrf
-                                <button type="submit" class="flex items-center text-gray-500 hover:text-red-600 transition-colors duration-200">
-                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                    <span class="text-sm font-medium">{{ $post->reactions->count() }} Likes</span>
-                                </button>
-                            </form>
-                            @else
-                            <span class="flex items-center text-gray-500">
-                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                                <span class="text-sm font-medium">{{ $post->reactions->count() }} Likes</span>
-                            </span>
-                            @endauth
+                            <x-reaction-button :post="$post" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        @if (Auth::user())
+        <!-- Comment Form -->
+        @auth
         <div class="mt-6">
             <form action="{{ route('comments.store', $post) }}" method="POST" class="flex items-center w-full">
                 @csrf
+                <x-profile-avatar :user="auth()->user()" class="w-10 h-10 rounded-full object-cover mr-4 border-2 border-gray-200" />
                 <x-text-input placeholder="Write your comment..." class="w-full" name="content" />
                 <x-primary-button class="ml-4 h-10">Comment</x-primary-button>
             </form>
         </div>
-        @endif
+        @endauth
 
         <!-- Comments Section -->
         <div class="mt-6">
