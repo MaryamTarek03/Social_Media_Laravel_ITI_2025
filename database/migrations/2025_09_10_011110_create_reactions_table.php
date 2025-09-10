@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('reactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('post_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('reaction_type_id')->default(1)->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('reaction_type_id')->constrained()->cascadeOnDelete();
+            $table->morphs('reactable');
             $table->timestamps();
 
-            $table->unique(['post_id', 'user_id']);
+            // Unique constraint to prevent duplicate reactions
+            $table->unique(['user_id', 'reaction_type_id', 'reactable_id', 'reactable_type'], 'unique_user_reaction');
         });
     }
 

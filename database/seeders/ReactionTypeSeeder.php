@@ -14,10 +14,17 @@ class ReactionTypeSeeder extends Seeder
     public function run(): void
     {
         // Create the standard reaction types
-        $reactionTypes = ['like', 'love', 'haha', 'wow', 'sad', 'angry'];
+        $reactionTypes = [
+            ['key' => 'like', 'label' => 'Like', 'icon' => '👍'],
+            ['key' => 'love', 'label' => 'Love', 'icon' => '❤️'],
+            ['key' => 'haha', 'label' => 'Haha', 'icon' => '😂'],
+            ['key' => 'wow', 'label' => 'Wow', 'icon' => '😮'],
+            ['key' => 'sad', 'label' => 'Sad', 'icon' => '😢'],
+            ['key' => 'angry', 'label' => 'Angry', 'icon' => '😠'],
+        ];
 
         foreach ($reactionTypes as $type) {
-            ReactionType::firstOrCreate(['name' => $type]);
+            ReactionType::firstOrCreate(['key' => $type['key']], $type);
         }
     }
 }
