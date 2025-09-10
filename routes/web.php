@@ -2,11 +2,12 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-
-
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentNotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,11 @@ Route::resource('users', \App\Http\Controllers\UserController::class);
 Route::middleware('guest')->group(function () {
     Route::get('/mylogin', [LoginController::class, 'show'])->name('mylogin');
     Route::get('/myregister', [RegisterController::class, 'show'])->name('myregister');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy'); 
 });
 
 require __DIR__ . '/auth.php';
