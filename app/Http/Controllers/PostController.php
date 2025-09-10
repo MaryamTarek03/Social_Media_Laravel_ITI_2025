@@ -1,55 +1,118 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-        public function index(){
-        // $allposts =[
-        //     ['id' =>1,'title'=> 'php','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'],
-        //     ['id' =>2,'title'=> 'laravel','posted by'=> 'mohamed','created_add'=>'2022-10-10 08:08:00'],
-        //     ['id' =>3,'title'=> 'java','posted by'=> 'mariam','created_add'=>'2022-10-10 05:08:00'],
-        //     ['id' =>4,'title'=> 'css','posted by'=> 'tassnem','created_add'=>'2022-10-10 03:08:00'],
-        // ];
-        return view('posts.index',['posts'=>Post::all()]);
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
     }
-        public function show($postid){
-        $singlepost=[
-            'id' =>1,'title'=> 'php','description'=>'this description is:','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'
-        ];
-        return view('posts.show',['post'=>$singlepost]);
+
+    public function index()
+    {
+        $posts = Post::with(['user', 'reactions.type', 'comments'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(35);
+
+        return view('dashboard', compact('posts'));
     }
-        public function create(){
+
+    public function show(Post $post)
+    {
+        $post->load(['user', 'reactions.type', 'comments.user']);
+        return view('posts.show', compact('post'));
+    }
+
+    public function create()
+    {
         return view('posts.create');
     }
-        public function store(){
-        //get the user data
-        $data = Request()->all();
-        return $data;
-        //store the user data in database
 
-        //redirection to post.index
-        return to_route('posts.index');
-    }
-            public function update($id)
-        {
-    $title = request()->input('title');
-    $description = request()->input('description');
-    $post_creator = request()->input('post_creator');
-        // dd($title,$description,$post_creator);
-        //update the user data in database
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000',
+            'media' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120'
+        ]);
 
-        //redirection to post.show
-        return to_route('posts.show',$id);
+        $data = [
+            'user_id' => Auth::id(),
+            'content' => $request->input('content'),
+        ];
+
+        if ($request->hasFile('media')) {
+            $mediaPath = $request->file('media')->store('posts', 'public');
+            $data['media_url'] = $mediaPath;
         }
-        public function edit(\App\Models\Post $post){
+
+        Post::create($data);
+
+        return redirect()->route('dashboard')->with('success', 'Post created successfully!');
+    }
+
+    public function edit(Post $post)
+    {
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('posts.edit', compact('post'));
     }
-        public function destroy(){
-            // delete post from database
-            // redirection to post.index
-            return to_route('posts.index');
+
+    public function update(Request $request, Post $post)
+    {
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
         }
+
+        $request->validate([
+            'content' => 'required|string|max:1000',
+            'media' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120'
+        ]);
+
+        if ($request->input('remove_media')) {
+            if ($post->media_url) {
+                Storage::disk('public')->delete($post->media_url);
+                $post->media_url = null;
+            }
+        }
+
+        $data = $request->all();
+        if ($request->hasFile('media')) {
+            // Delete old media if exists
+            if ($post->media_url) {
+                Storage::disk('public')->delete($post->media_url);
+            }
+
+            $mediaPath = $request->file('media')->store('posts', 'public');
+            $data['media_url'] = $mediaPath;
+        }
+
+
+        $post->update($data);
+
+        return redirect()->route('posts.show', $post)->with('success', 'Post updated successfully!');
+    }
+
+    public function destroy(Post $post)
+    {
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Delete media file if exists
+        if ($post->media_url) {
+            Storage::disk('public')->delete($post->media_url);
+        }
+
+        $post->delete();
+
+        return redirect()->route('dashboard')->with('success', 'Post deleted successfully!');
+    }
 }

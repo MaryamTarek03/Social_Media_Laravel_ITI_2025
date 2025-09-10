@@ -17,21 +17,21 @@
         <div class="bg-white shadow-sm rounded-lg border border-gray-200">
             <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data" class="p-6 space-y-6">
                 @csrf
-                
+
                 <!-- Content -->
                 <div>
                     <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
                         What's on your mind?
                     </label>
-                    <textarea 
-                        id="content" 
-                        name="content" 
-                        rows="4" 
+                    <textarea
+                        id="content"
+                        name="content"
+                        rows="4"
                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('content') border-red-300 @enderror"
                         placeholder="Share your thoughts..."
                         required>{{ old('content') }}</textarea>
                     @error('content')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -48,11 +48,11 @@
                             <div class="flex text-sm text-gray-600">
                                 <label for="media" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                     <span>Upload a file</span>
-                                    <input 
-                                        id="media" 
-                                        name="media" 
-                                        type="file" 
-                                        class="sr-only" 
+                                    <input
+                                        id="media"
+                                        name="media"
+                                        type="file"
+                                        class="sr-only"
                                         accept="image/*"
                                         onchange="previewImage(this)">
                                 </label>
@@ -62,9 +62,9 @@
                         </div>
                     </div>
                     @error('media')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    
+
                     <!-- Image Preview -->
                     <div id="image-preview" class="hidden mt-4">
                         <img id="preview-img" class="h-32 w-auto rounded-lg shadow-sm" alt="Image preview">

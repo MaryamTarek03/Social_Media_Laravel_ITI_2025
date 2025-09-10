@@ -6,22 +6,21 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/posts',[PostController::class,'index'])->name('posts.index');
-Route::get('/posts/create',[PostController::class,'create'])->name('posts.create');
-Route::post('/posts',[PostController::class,'store'])->name('posts.store');
-Route::get('/posts/{post}',[PostController::class,'show'])->name('posts.show');
-Route::get('/posts/{post}/edit',[PostController::class,'edit'])->name('posts.edit');
-Route::put('/posts/{post}',[PostController::class,'update'])->name('posts.update');
-Route::delete('/posts/{post}',[PostController::class,'destroy'])->name('posts.destroy');
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -32,6 +31,11 @@ Route::middleware('auth')->group(function () {
     // Reactions
     Route::post('/posts/{post}/react', [ReactionController::class, 'store'])->name('reactions.store');
     Route::delete('/posts/{post}/react', [ReactionController::class, 'destroy'])->name('reactions.destroy');
+
+    // Comments
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     // Follows
     Route::post('/users/{user}/follow', [FollowController::class, 'store'])->name('follows.store');
