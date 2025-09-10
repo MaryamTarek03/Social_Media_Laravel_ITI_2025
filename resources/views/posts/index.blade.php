@@ -1,7 +1,7 @@
 <x-app-layout>
         <div class="mt-4">
 <div class="text-center">
-                <a href="{{route('posts.create')}}" class="btn btn-success">Creat Posts</a>
+                <a href="{{route('posts.create')}}" class="btn btn-success">Create Posts</a>
             </div>
             </div>
                 <table class="table ">

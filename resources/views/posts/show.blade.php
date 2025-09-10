@@ -1,7 +1,7 @@
 <x-app-layout>
         <div class="mt-4">
 <div class="text-center">
-                <a href="{{route('posts.create')}}" class="btn btn-success">Creat Posts</a>
+                <a href="{{route('posts.create')}}" class="btn btn-success">Create Posts</a>
             </div>
             </div>
            
@@ -12,7 +12,7 @@
 <div class="card-body">
     <h5 class="card-title">Title: {{$post['id']}}</h5>
     
-   <p>Description: {{$post['discription']}}</p>
+   <p>Description: {{$post['description']}}</p>
     
 </div>
 </div>

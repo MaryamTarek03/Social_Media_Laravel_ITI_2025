@@ -17,7 +17,7 @@ class PostController extends Controller
     }
         public function show($postid){
         $singlepost=[
-            'id' =>1,'title'=> 'php','discription'=>'this dicription is:','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'
+            'id' =>1,'title'=> 'php','description'=>'this description is:','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'
         ];
         return view('posts.show',['post'=>$singlepost]);
     }
@@ -48,7 +48,7 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
         public function destroy(){
-            // delet post from data base
+            // delete post from database
             // redirection to post.index
             return to_route('posts.index');
         }
