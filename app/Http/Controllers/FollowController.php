@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Follow;
 use App\Models\User;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,14 @@ class FollowController extends Controller
             'follower_id' => Auth::id(),
             'following_id' => $user->id,
         ]);
+
+        // Create notification for the followed user
+        NotificationController::createNotification(
+            $user->id,
+            'follow',
+            '<strong>' . Auth::user()->name . '</strong> started following you.',
+            Auth::id()
+        );
 
         return response()->json([
             'success' => true,

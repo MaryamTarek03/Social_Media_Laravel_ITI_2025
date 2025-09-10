@@ -87,4 +87,32 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id');
     }
+
+    /**
+     * Get all chats for this user
+     */
+    public function chats()
+    {
+        return Chat::where('user1_id', $this->id)
+            ->orWhere('user2_id', $this->id);
+    }
+
+    /**
+     * Get sent messages
+     */
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Get received messages
+     */
+    public function receivedMessages()
+    {
+        return Message::whereHas('chat', function ($query) {
+            $query->where('user1_id', $this->id)
+                ->orWhere('user2_id', $this->id);
+        })->where('sender_id', '!=', $this->id);
+    }
 }

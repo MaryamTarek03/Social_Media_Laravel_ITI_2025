@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reaction_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique(); // like, love, haha, wow, etc.
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            //
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reaction_types');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };
