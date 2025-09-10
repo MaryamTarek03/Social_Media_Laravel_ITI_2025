@@ -15,13 +15,15 @@ class PostFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    
+
     public function definition(): array
     {
         return [
             'user_id' => User::factory(),
-            'content' => $this->faker->paragraph(),
-            'media_url' => $this->faker->optional()->imageUrl(),
+            'body' => $this->faker->paragraph(),
+            'image' => $this->faker->optional()->imageUrl(),
+            'visibility' => 'public',
+            'metadata' => null,
         ];
     }
 }

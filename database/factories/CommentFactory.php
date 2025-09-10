@@ -18,8 +18,9 @@ class CommentFactory extends Factory
     {
         return [
             "user_id" => \App\Models\User::factory(),
-            "post_id" => null, 
-            "content" => $this->faker->sentence(),
+            "post_id" => null,
+            "body" => $this->faker->sentence(),
+            "image" => null,
         ];
     }
 }

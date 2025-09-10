@@ -1,55 +1,81 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-        public function index(){
-        // $allposts =[
-        //     ['id' =>1,'title'=> 'php','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'],
-        //     ['id' =>2,'title'=> 'laravel','posted by'=> 'mohamed','created_add'=>'2022-10-10 08:08:00'],
-        //     ['id' =>3,'title'=> 'java','posted by'=> 'mariam','created_add'=>'2022-10-10 05:08:00'],
-        //     ['id' =>4,'title'=> 'css','posted by'=> 'tassnem','created_add'=>'2022-10-10 03:08:00'],
-        // ];
-        return view('posts.index',['posts'=>Post::all()]);
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
-        public function show($postid){
-        $singlepost=[
-            'id' =>1,'title'=> 'php','description'=>'this description is:','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'
-        ];
-        return view('posts.show',['post'=>$singlepost]);
-    }
-        public function create(){
-        return view('posts.create');
-    }
-        public function store(){
-        //get the user data
-        $data = Request()->all();
-        return $data;
-        //store the user data in database
 
-        //redirection to post.index
-        return to_route('posts.index');
-    }
-            public function update($id)
-        {
-    $title = request()->input('title');
-    $description = request()->input('description');
-    $post_creator = request()->input('post_creator');
-        // dd($title,$description,$post_creator);
-        //update the user data in database
+    /**
+     * Store a newly created post.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
 
-        //redirection to post.show
-        return to_route('posts.show',$id);
-        }
-        public function edit(\App\Models\Post $post){
-        return view('posts.edit', compact('post'));
+        $post = Post::create([
+            'user_id' => Auth::id(),
+            'content' => $request->content,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'post' => $post->load('user'),
+            'message' => 'Post created successfully!'
+        ]);
     }
-        public function destroy(){
-            // delete post from database
-            // redirection to post.index
-            return to_route('posts.index');
-        }
+
+    /**
+     * Display the specified post.
+     */
+    public function show(Post $post)
+    {
+        return view('posts.show', compact('post'));
+    }
+
+    /**
+     * Update the specified post.
+     */
+    public function update(Request $request, Post $post)
+    {
+        $this->authorize('update', $post);
+
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $post->update([
+            'content' => $request->content,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'post' => $post,
+            'message' => 'Post updated successfully!'
+        ]);
+    }
+
+    /**
+     * Remove the specified post.
+     */
+    public function destroy(Post $post)
+    {
+        $this->authorize('delete', $post);
+
+        $post->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Post deleted successfully!'
+        ]);
+    }
 }

@@ -9,7 +9,9 @@ class ReactionType extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'key',
+        'label',
+        'icon',
     ];
 
     public function reactions()
