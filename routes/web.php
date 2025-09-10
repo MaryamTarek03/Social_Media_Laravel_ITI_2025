@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/timeline', [PostController::class, 'timeline'])->name('timeline');
+
     // Reactions
     Route::post('/posts/{post}/react', [ReactionController::class, 'store'])->name('reactions.store');
     // Route::delete('/posts/{post}/react', [ReactionController::class, 'destroy'])->name('reactions.destroy');
@@ -44,7 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{user}/following', [FollowController::class, 'following'])->name('users.following');
 });
 
-Route::resource('users', \App\Http\Controllers\UserController::class);
+Route::resource('users', UserController::class);
+
+Route::get('/users/list/{user}/followers', [UserController::class, 'listFollowers'])->name('users.list.followers');
+Route::get('/users/list/{user}/following', [UserController::class, 'listFollowing'])->name('users.list.following');
+Route::get('/users/list/{post}/reactions', [UserController::class, 'listReactions'])->name('users.list.reactions');
+
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/mylogin', [LoginController::class, 'show'])->name('mylogin');

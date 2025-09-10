@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 md:py-4 py-6">
         <!-- Success Message -->
         @if (session('success'))
         <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md">
@@ -33,11 +33,11 @@
                             </div>
                             <div class="text-center">
                                 <div class="text-2xl font-bold text-gray-900">{{ $user->followers->count() ?? 0 }}</div>
-                                <div class="text-sm text-gray-500">Followers</div>
+                                <div class="text-sm text-gray-500"><a href="{{ route('users.list.followers', $user) }}">Followers</a></div>
                             </div>
                             <div class="text-center">
                                 <div class="text-2xl font-bold text-gray-900">{{ $user->following->count() ?? 0 }}</div>
-                                <div class="text-sm text-gray-500">Following</div>
+                                <div class="text-sm text-gray-500"><a href="{{ route('users.list.following', $user) }}">Following</a></div>
                             </div>
                         </div>
 
@@ -53,15 +53,15 @@
                             </a>
                             @else
                             <!-- Other User Actions -->
-                            <button
+                            <x-primary-button
                                 onclick="toggleFollow({{ $user->id }})"
                                 id="follow-btn-{{ $user->id }}"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white {{ isset($isFollowing) && $isFollowing ? 'bg-gray-600 hover:bg-gray-700' : 'bg-indigo-600 hover:bg-indigo-700' }} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="{{ isset($isFollowing) && $isFollowing ? 'bg-gray-600 hover:bg-gray-700' : '' }}">
                                 <svg class="-ml-1 mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
                                 {{ isset($isFollowing) && $isFollowing ? 'Unfollow' : 'Follow' }}
-                            </button>
+                            </x-primary-button>
                             @endif
                         </div>
                     </div>
@@ -71,11 +71,26 @@
 
         <!-- Posts Section -->
         <div class="mb-8">
-            <h2 class="text-xl font-bold text-gray-900 mb-6">Posts</h2>
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-900">Posts ({{ $user->posts->count() }})</h2>
+                @if (Auth::id() === $user->id)
+                <x-primary-button>
+                    <a href="{{ route('posts.create') }}" class="inline-flex items-center">
+                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Create Post
+                    </a>
+                </x-primary-button>
+                @endif
+            </div>
 
             @if($user->posts && $user->posts->count() > 0)
             <div class="space-y-6">
-                @foreach($user->posts as $post)
+                @php
+                $userPosts = $user->posts->sortByDesc('created_at');
+                @endphp
+                @foreach($userPosts as $post)
                 <x-post :post="$post" />
                 @endforeach
             </div>

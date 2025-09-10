@@ -78,6 +78,9 @@
                             <x-reaction-button :post="$post" />
                         </div>
                     </div>
+                    <a href="{{ route('users.list.reactions', $post) }}" class="text-sm text-gray-500 hover:text-gray-700">
+                        View Reactions
+                    </a>
                 </div>
             </div>
         </div>

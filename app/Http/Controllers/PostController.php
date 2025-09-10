@@ -16,13 +16,26 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::with(['user', 'reactions.type', 'comments'])
+        $posts = Post::with(['user'])
             ->orderBy('created_at', 'desc')
             ->paginate(35);
 
         return view('dashboard', compact('posts'));
     }
+    public function timeline()
+    {
+        $user = Auth::user();
+        $followedUsers = $user->followedUsers->pluck('id');
 
+        // dump($followedUsers);
+        $posts = Post::with(['user'])
+            ->whereIn('user_id', $followedUsers->toArray())
+            ->orderBy('created_at', 'desc')
+            ->paginate(35);
+        // dump($posts);
+
+        return view('dashboard', compact('posts'));
+    }
     public function show(Post $post)
     {
         $post->load(['user', 'reactions.type', 'comments.user']);

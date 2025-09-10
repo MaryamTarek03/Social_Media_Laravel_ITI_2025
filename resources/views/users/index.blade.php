@@ -22,13 +22,7 @@
                     <div class="text-center">
                         <!-- Avatar -->
                         <div class="mb-4">
-                            @if($user->avatar_url)
-                            <img src="{{ Storage::url($user->avatar_url) }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-full mx-auto object-cover border-4 border-gray-100">
-                            @else
-                            <div class="w-20 h-20 rounded-full mx-auto bg-indigo-500 flex items-center justify-center border-4 border-gray-100">
-                                <span class="text-xl font-semibold text-white">{{ substr($user->name, 0, 1) }}</span>
-                            </div>
-                            @endif
+                            <x-profile-avatar :user="$user" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-gray-100" />
                         </div>
 
                         <!-- User Info -->
