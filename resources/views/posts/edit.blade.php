@@ -1,7 +1,4 @@
-
-        @extends('layouts.app')
-        @section('title') edit @endsection
-        @section('content')
+<x-app-layout>
         <form method="POST" action="{{ route('posts.update', $post->id) }}">
             @csrf
             @method('PUT')
@@ -23,4 +20,4 @@
             <br>
                 <button class="btn btn-primary">update</button>   
         </form>      
-        @endsection
+</x-app-layout>

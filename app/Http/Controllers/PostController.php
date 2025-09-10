@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
         public function index(){
-        $allposts =[
-            ['id' =>1,'title'=> 'php','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'],
-            ['id' =>2,'title'=> 'laravel','posted by'=> 'mohamed','created_add'=>'2022-10-10 08:08:00'],
-            ['id' =>3,'title'=> 'java','posted by'=> 'mariam','created_add'=>'2022-10-10 05:08:00'],
-            ['id' =>4,'title'=> 'css','posted by'=> 'tassnem','created_add'=>'2022-10-10 03:08:00'],
-        ];
-        return view('posts.index',['posts'=>$allposts]);
+        // $allposts =[
+        //     ['id' =>1,'title'=> 'php','posted by'=> 'ahmed','created_add'=>'2022-10-10 09:08:00'],
+        //     ['id' =>2,'title'=> 'laravel','posted by'=> 'mohamed','created_add'=>'2022-10-10 08:08:00'],
+        //     ['id' =>3,'title'=> 'java','posted by'=> 'mariam','created_add'=>'2022-10-10 05:08:00'],
+        //     ['id' =>4,'title'=> 'css','posted by'=> 'tassnem','created_add'=>'2022-10-10 03:08:00'],
+        // ];
+        return view('posts.index',['posts'=>Post::all()]);
     }
         public function show($postid){
         $singlepost=[
@@ -44,8 +44,8 @@ class PostController extends Controller
         //redirection to post.show
         return to_route('posts.show',$id);
         }
-        public function edit(){
-        return view('posts.edit');
+        public function edit(\App\Models\Post $post){
+        return view('posts.edit', compact('post'));
     }
         public function destroy(){
             // delet post from data base

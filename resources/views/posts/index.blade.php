@@ -1,7 +1,4 @@
-        @extends('layouts.app')
-        @section('title') index
-        @endsection
-        @section('content')
+<x-app-layout>
         <div class="mt-4">
 <div class="text-center">
                 <a href="{{route('posts.create')}}" class="btn btn-success">Creat Posts</a>
@@ -22,11 +19,11 @@
 @foreach ($posts as $post )
         <tr>
         <td>{{$post['id']}}</td>
-        <td>{{$post['title']}}</td>
-        <td>{{$post['posted by']}}</td>
-        <td>{{$post['created_add']}}</td>
+        <td>{{$post['content']}}</td>
+        <td>{{$post->user->name}}</td>
+        <td>{{$post->created_at}}</td>
         <td>
-            <a href="{{route('posts.show', $post['id'])}}" class="btn btn-info">View</a>
+        <a href="{{route('posts.show', $post['id'])}}" class="btn btn-info">View</a>
 <a href="{{ route('posts.edit', $post['id']) }}" class="btn btn-primary">Edit</a>
 
 <form action="{{ route('posts.destroy', $post['id']) }}" method="POST" style="display:inline;">
@@ -45,7 +42,7 @@
         <h2>{{ $post->title }}</h2>
         <p>{{ $post->content }}</p>
 
-        @if(auth()->id() === $post->user_id)
+        @if(Auth::user() === $post->user_id)
             <a href="{{ route('posts.edit', $post->id) }}">Edit</a>
 
             <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
@@ -56,4 +53,4 @@
         @endif
     </div>
 @endforeach --}}
-@endsection
+</x-app-layout>

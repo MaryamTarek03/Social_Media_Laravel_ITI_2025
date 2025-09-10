@@ -1,6 +1,4 @@
-        @extends('layouts.app')
-        @section('title') creat @endsection
-        @section('content')
+<x-app-layout>
         <form method="POST" action="{{route('posts.store')}}">
             @csrf
             <div class="nb-3">
@@ -21,4 +19,4 @@
             <br>
                 <button class="btn btn-success">Submit</button>   
         </form>      
-        @endsection
+</x-app-layout>
