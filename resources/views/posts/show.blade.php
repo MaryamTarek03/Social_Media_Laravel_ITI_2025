@@ -91,23 +91,26 @@
             <form action="{{ route('comments.store', $post) }}" method="POST" class="flex items-center w-full">
                 @csrf
                 <x-profile-avatar :user="auth()->user()" class="w-10 h-10 rounded-full object-cover mr-4 border-2 border-gray-200" />
-                <x-text-input placeholder="Write your comment..." class="w-full" name="content" />
+                <x-text-input placeholder="Write your comment..." class="w-full" name="content" autocomplete="off" />
                 <x-primary-button class="ml-4 h-10">Comment</x-primary-button>
             </form>
         </div>
         @endauth
 
         <!-- Comments Section -->
+        @php
+        $comments = $post->comments()->with('user')->latest()->get();
+        @endphp
         <div class="mt-6">
             <div class="bg-white shadow-sm rounded-lg border border-gray-200">
                 <div class="px-6 py-4 border-b border-gray-200">
                     <h3 class="text-lg font-medium text-gray-900">
-                        Comments ({{ $post->comments->count() }})
+                        Comments ({{ $comments->count() }})
                     </h3>
                 </div>
 
                 <div class="divide-y divide-gray-200">
-                    @forelse($post->comments as $comment)
+                    @forelse($comments as $comment)
                     <x-comment :comment="$comment" />
                     @empty
                     <div class="p-6 text-center">

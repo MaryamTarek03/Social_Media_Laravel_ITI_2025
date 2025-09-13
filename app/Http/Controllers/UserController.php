@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Follow;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -22,7 +23,7 @@ class UserController extends Controller
     {
         $user->loadCount(['followers', 'following', 'posts']);
 
-        $isFollowing = \App\Models\Follow::where('follower_id', Auth::id())
+        $isFollowing = Follow::where('follower_id', Auth::id())
             ->where('following_id', $user->id)
             ->exists();
 
